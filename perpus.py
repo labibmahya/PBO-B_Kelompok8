@@ -58,7 +58,7 @@ class MyFrame1 ( wx.Frame ):
 
 		fgSizer1.Add( self.m_staticText4, 0, wx.ALL, 5 )
 
-		self.m_textCtrl2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_textCtrl2 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PASSWORD )
 		fgSizer1.Add( self.m_textCtrl2, 0, wx.ALL, 5 )
 
 
