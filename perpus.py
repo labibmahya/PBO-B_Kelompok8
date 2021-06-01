@@ -114,40 +114,6 @@ class MyFrame1 ( wx.Frame ):
 
 
 ###########################################################################
-## Class MyDialog1
-###########################################################################
-
-class MyDialog1 ( wx.Dialog ):
-
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE )
-
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-
-		bSizer7 = wx.BoxSizer( wx.VERTICAL )
-
-		self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, u"Username dan password yang anda", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText13.Wrap( -1 )
-
-		bSizer7.Add( self.m_staticText13, 0, wx.ALL, 5 )
-
-		self.m_staticText14 = wx.StaticText( self, wx.ID_ANY, u"masukkan tidak sesuai", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText14.Wrap( -1 )
-
-		bSizer7.Add( self.m_staticText14, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 5 )
-
-
-		self.SetSizer( bSizer7 )
-		self.Layout()
-		bSizer7.Fit( self )
-
-		self.Centre( wx.BOTH )
-
-	def __del__( self ):
-		pass
-
-
-###########################################################################
 ## Class MyFrame2
 ###########################################################################
 
@@ -267,35 +233,6 @@ class MyFrame2 ( wx.Frame ):
 
 
 ###########################################################################
-## Class MyDialog2
-###########################################################################
-
-class MyDialog2 ( wx.Dialog ):
-
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE )
-
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-
-		bSizer8 = wx.BoxSizer( wx.VERTICAL )
-
-		self.m_staticText15 = wx.StaticText( self, wx.ID_ANY, u"Lengkapi data untuk mendaftar !!", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText15.Wrap( -1 )
-
-		bSizer8.Add( self.m_staticText15, 0, wx.ALL, 5 )
-
-
-		self.SetSizer( bSizer8 )
-		self.Layout()
-		bSizer8.Fit( self )
-
-		self.Centre( wx.BOTH )
-
-	def __del__( self ):
-		pass
-
-
-###########################################################################
 ## Class MyFrame3
 ###########################################################################
 
@@ -308,7 +245,7 @@ class MyFrame3 ( wx.Frame ):
 
 		bSizer7 = wx.BoxSizer( wx.VERTICAL )
 
-		fgSizer7 = wx.FlexGridSizer( 0, 4, 0, 0 )
+		fgSizer7 = wx.FlexGridSizer( 0, 5, 0, 0 )
 		fgSizer7.SetFlexibleDirection( wx.BOTH )
 		fgSizer7.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
@@ -331,14 +268,14 @@ class MyFrame3 ( wx.Frame ):
 
 		bSizer10 = wx.BoxSizer( wx.VERTICAL )
 
-		self.m_grid4 = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_grid4 = wx.grid.Grid( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 
 		# Grid
-		self.m_grid4.CreateGrid( 20, 9 )
+		self.m_grid4.CreateGrid( 0, 9 )
 		self.m_grid4.EnableEditing( False )
 		self.m_grid4.EnableGridLines( True )
 		self.m_grid4.EnableDragGridSize( False )
-		self.m_grid4.SetMargins( 0, 0 )
+		self.m_grid4.SetMargins( 0, 35 )
 
 		# Columns
 		self.m_grid4.SetColSize( 0, 80 )
@@ -544,34 +481,5 @@ class MyFrame4 ( wx.Frame ):
 
 	def button_simpan( self, event ):
 		event.Skip()
-
-
-###########################################################################
-## Class MyDialog3
-###########################################################################
-
-class MyDialog3 ( wx.Dialog ):
-
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE )
-
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-
-		bSizer11 = wx.BoxSizer( wx.VERTICAL )
-
-		self.m_staticText29 = wx.StaticText( self, wx.ID_ANY, u"Lengkapi data untuk menambah buku !!!", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText29.Wrap( -1 )
-
-		bSizer11.Add( self.m_staticText29, 0, wx.ALL, 5 )
-
-
-		self.SetSizer( bSizer11 )
-		self.Layout()
-		bSizer11.Fit( self )
-
-		self.Centre( wx.BOTH )
-
-	def __del__( self ):
-		pass
 
 
