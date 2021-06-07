@@ -18,29 +18,29 @@ class Main(DataManager, perpus.MyFrame1):
     def __init__(self, parent):
         perpus.MyFrame1.__init__(self, parent)
         self.DM = DataManager()
-    
+
     def button_login( self, event ):
         username = self.m_textCtrl1.GetValue()
         password = self.m_textCtrl2.GetValue()
-
-        self.query = 'SELECT * FROM user'
+        self.query = "SELECT * FROM user where username = '{}' and password = '{}'".format(username, password)
         hasil = self.DM.Jalankan(self.query, returnData = True)
 
-        for row in hasil:
-            if username == row[1] and password == row[5]:
-                event = Main3(None)
-                event.Show()
-                self.Destroy()
-                # conn.close()
-            else:
-                wx.MessageBox('Username atau Password yang anda masukkan salah', 'Terjadi Kesalahan')
+        if hasil is not None and len(hasil) > 0 :
+            event = Main3(None)
+            event.Show()
+            self.Destroy()
+            self.DM.conn.close()
+            return username
+        else:
+            wx.MessageBox('Username atau Password yang anda masukkan salah', 'Terjadi Kesalahan')
+
 
     def klik_daftar( self, event ):
         event = Main2(None)
         event.Show()
         self.Destroy()
 
-class Main2(DataManager, perpus.MyFrame2):
+class Main2(Main, perpus.MyFrame2):
     def __init__(self, parent):
         perpus.MyFrame2.__init__(self, parent)
         self.DM = DataManager()
@@ -59,7 +59,7 @@ class Main2(DataManager, perpus.MyFrame2):
             event = Main(None)
             event.Show()
             self.Destroy()
-            # conn.close()
+            self.DM.conn.close()
         else:
             wx.MessageBox('Data tidak boleh kosong', 'Terjadi Kesalahan')
 
@@ -68,7 +68,7 @@ class Main2(DataManager, perpus.MyFrame2):
         event.Show()
         self.Destroy()
 
-class Main3(DataManager, perpus.MyFrame3):
+class Main3(Main2, perpus.MyFrame3):
     def __init__(self, parent):
         perpus.MyFrame3.__init__(self, parent)
         self.m_grid4.SetColLabelValue(0, "Kode Buku")
@@ -81,8 +81,12 @@ class Main3(DataManager, perpus.MyFrame3):
         self.m_grid4.SetColLabelValue(7, "Jumlah Buku")
         self.m_grid4.SetColLabelValue(8, "Kategori")
         self.m_grid4.SetColLabelValue(9, "Nomor Rak")
+        self.m_grid4.SetColLabelValue(10, "Edit")
         self.DM = DataManager()
-
+        self.m = Main(self)
+        self.tampil()
+        
+    def tampil(self):    
         self.query = 'SELECT * FROM buku'
         hasil = self.DM.Jalankan(self.query, returnData=True)
         for a in hasil:
@@ -92,44 +96,81 @@ class Main3(DataManager, perpus.MyFrame3):
             for row in hasil:
                 self.m_grid4.SetCellValue(a, b, str(row[b]))
                 a = a + 1
-                # conn.close()
 
-        jmlKolom = self.m_grid4.GetNumberCols()
-        self.m_grid4.AppendCols(2)
-        colEdit = jmlKolom
-        colDel = jmlKolom + 1
+    def m_grid4OnGridCmdSelectCell( self, event ):
+        row = event.GetRow()
+        self.showTex(row)
 
-        self.m_grid4.SetColLabelValue(colEdit, '')
-        self.m_grid4.SetColLabelValue(colDel, '')
+    def showTex(self, row):
+        kode = self.m_grid4.GetCellValue(row, 0)
+        judul = self.m_grid4.GetCellValue(row, 1)
+        pengarang = self.m_grid4.GetCellValue(row, 2)
+        penerbit = self.m_grid4.GetCellValue(row, 3)
+        tmpt_terbit = self.m_grid4.GetCellValue(row, 4)
+        thn_terbit = self.m_grid4.GetCellValue(row, 5)
+        jml_buku = self.m_grid4.GetCellValue(row, 6)
+        jml_Kolom = self.m_grid4.GetCellValue(row, 7)
+        kategori = self.m_grid4.GetCellValue(row, 8)
+        noRak = self.m_grid4.GetCellValue(row, 9)
 
-        for row in range (self.m_grid4.GetNumberRows()):
-            self.m_grid4.SetCellValue(row, colEdit, 'Edit')
-            self.m_grid4.SetCellBackgroundColour(row, colEdit, wx.BLUE)
-            self.m_grid4.SetCellTextColour(row, colEdit, wx.WHITE)
+        self.m_textCtrl18.SetValue(kode)
+        self.m_textCtrl19.SetValue(judul)
+        self.m_textCtrl20.SetValue(pengarang)
+        self.m_textCtrl21.SetValue(penerbit)
+        self.m_textCtrl22.SetValue(tmpt_terbit)
+        self.m_textCtrl23.SetValue(thn_terbit)
+        self.m_textCtrl24.SetValue(jml_buku)
+        self.m_textCtrl25.SetValue(jml_Kolom)
+        self.m_textCtrl26.SetValue(kategori)
+        self.m_textCtrl27.SetValue(noRak)
 
-            self.m_grid4.SetCellValue(row, colDel, 'Delete')
-            self.m_grid4.SetCellBackgroundColour(row, colDel, wx.RED)
-            self.m_grid4.SetCellTextColour(row, colDel, wx.WHITE)
+    def btn_simpanEdit(self, event):
+        kode = self.m_textCtrl18.GetValue()
+        judul = self.m_textCtrl19.GetValue()
+        pengarang = self.m_textCtrl20.GetValue()
+        penerbit = self.m_textCtrl21.GetValue()
+        tmpt_terbit = self.m_textCtrl22.GetValue()
+        thn_terbit = self.m_textCtrl23.GetValue()
+        jml_buku = self.m_textCtrl24.GetValue()
+        jml_Kolom = self.m_textCtrl25.GetValue()
+        kategori = self.m_textCtrl26.GetValue()
+        noRak = self.m_textCtrl27.GetValue()
 
-        self.m_grid4.Fit()   
+        self.query = "update buku set judul = \'%s\', pengarang = \'%s\', penerbit = \'%s\', tempatTerbit = \'%s\', tahunTerbit = \'%s\', jumlahHalaman = \'%s\', jumlahBuku = \'%s\', kategori = \'%s\', nomorRak = \'%s\' WHERE kodeBuku = \'%s\'"
+        self.query = self.query % (judul, pengarang, penerbit, tmpt_terbit, thn_terbit, jml_buku, jml_Kolom, kategori, noRak, kode)
+        self.DM.Jalankan(self.query)
+        if kode != "":
+            self.refresh(event)
+
+    def refresh( self, event ):
+        event = Main3(None)
+        event.Show()
+        self.Destroy()
+
+    def btn_deleteBuku( self, event ):
+        kodeBuku = self.m_textCtrl18.GetValue()
+        self.query = "DELETE From buku WHERE kodeBuku = \'%s\'"
+        self.query = self.query % (kodeBuku)
+        self.DM.Jalankan(self.query)
+        if kodeBuku != "":
+            self.refresh(event)
 
     def button_tambah( self, event ):
         event = Main4(None)
         event.Show()
         
     def button_keluar( self, event ):
+        self.DM.conn.close()
         event = Main(None)
         event.Show()
         self.Destroy()
 
-class Main4(DataManager, perpus.MyFrame4):
+class Main4(Main3, perpus.MyFrame4):
     def __init__(self, parent):
         perpus.MyFrame4.__init__(self, parent)
         self.DM = DataManager()
 
     def button_batal( self, event ):
-        event = Main3(None)
-        event.Show()
         self.Destroy()
         
     def button_simpan( self, event ):
@@ -148,26 +189,12 @@ class Main4(DataManager, perpus.MyFrame4):
             self.query = 'INSERT INTO buku (kodeBuku, judul, pengarang, penerbit, tempatTerbit, tahunTerbit, jumlahHalaman, jumlahBuku, kategori, nomorRak) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'
             self.query = self.query % (kode, judul, pengarang, penerbit, tmpt_terbit, thn_terbit, jml_halaman, jml_buku, kategori, no_rak)
             self.DM.Jalankan(self.query)
-            event = Main3(None)
-            event.Show()
             self.Destroy()
-            # conn.close()
+            self.DM.conn.close()
         else :
             wx.MessageBox('Data tidak boleh kosong', 'Terjadi Kesalahan')
-    
-    def cari_grid( self, event ): #GURUNG ISO
-        judul = self.m_searchCtrl1.GetValue()
-        self.query = "SELECT * FROM buku WHERE judul = \'%s\'"
-        self.query = self.query % (judul)
-        hasil = self.Jalankan(self.query, returnData=True)
-        for b in range (9):
-            a = 0
-            for row in hasil:
-                self.m_grid4.SetCellValue(a, b, str(row[b]))
-                a = a + 1
 
 run = wx.App()
 frame = Main(parent=None)
 frame.Show()
 run.MainLoop()
-# conn.close()
